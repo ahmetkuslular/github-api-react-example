@@ -1,11 +1,17 @@
 import React from 'react';
-import './App.css';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
+import { store, persistor } from 'store';
+import Home from 'pages/Home';
 
 function App() {
   return (
-    <div className="App">
-      Hello World
-    </div>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Home />
+      </PersistGate>
+    </Provider>
   );
 }
 
