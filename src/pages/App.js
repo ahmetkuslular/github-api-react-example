@@ -104,6 +104,9 @@ export default connect(
 const AppTitle = styled.h2`
   color: #b5b5b5;
   text-align: center;
+  &:hover {
+    color: #f50;
+  }
 `;
 
 export const ContainerBox = styled.div`

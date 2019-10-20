@@ -22,10 +22,9 @@ class Columns extends Component {
       field: column.dataIndex,
       columnKey: column.key,
     };
+
+    this.setState({ sorter: temp });
     onChange && onChange(temp);
-    this.setState({
-      sorter: temp,
-    });
   };
 
   render() {
@@ -35,11 +34,15 @@ class Columns extends Component {
       <TitlesWrapper>
         <Titles>
           {columns.map(column => {
-            return (
-              <Title key={column.key} sorter={column.sorter} onClick={() => this.onChange(column)}>
-                {column.title}
-                {column.sorter ? (
-                  sorter && column.key === sorter.columnKey ? (
+            if (column.sorter) {
+              return (
+                <Title
+                  key={column.key}
+                  sorter={column.sorter}
+                  onClick={() => this.onChange(column)}
+                >
+                  {column.title}
+                  {sorter && column.key === sorter.columnKey ? (
                     sorter.order === 'asc' ? (
                       <UpIcon width={12} height={12} color="#f50" style={{ marginLeft: 10 }} />
                     ) : (
@@ -47,10 +50,11 @@ class Columns extends Component {
                     )
                   ) : (
                     <SortIcon width={12} height={12} color="gray" style={{ marginLeft: 10 }} />
-                  )
-                ) : null}
-              </Title>
-            );
+                  )}
+                </Title>
+              );
+            }
+            return <Title key={column.key}>{column.title}</Title>;
           })}
         </Titles>
       </TitlesWrapper>
@@ -64,6 +68,7 @@ const TitlesWrapper = styled.thead`
   `};
 `;
 const Titles = styled.tr``;
+
 const Title = styled.th`
   flex: 1;
   justify-content: space-between;
@@ -73,14 +78,15 @@ const Title = styled.th`
   text-align: left;
   white-space: pre-line;
   color: #395564;
-  ${props =>
-    props.sorter &&
-    css`
-      &:hover {
-        background-color: #f6f6f6;
-        cursor: pointer;
-      }
-    `};
+  white-space: nowrap
+    ${props =>
+      props.sorter &&
+      css`
+        &:hover {
+          background-color: #f6f6f6;
+          cursor: pointer;
+        }
+      `};
 `;
 
 export default Columns;

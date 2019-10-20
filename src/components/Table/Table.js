@@ -7,6 +7,7 @@ import Pagination from './Pagination';
 import Items from './Items';
 
 import { media } from 'utils';
+import { EmptyData } from '../Icons';
 
 class Table extends Component {
   state = {
@@ -41,6 +42,11 @@ class Table extends Component {
           <Columns columns={columns} onChange={this.handleSorting} />
           <Items columns={columns} data={data} rowKey={rowKey} />
         </StyledTable>
+        {data.length < 1 && (
+          <EmptyDataWrapper>
+            <EmptyData />
+          </EmptyDataWrapper>
+        )}
         {pagination && <Pagination {...pagination} onChange={this.handlePagination} />}
       </TableOverflow>
     );
@@ -59,6 +65,7 @@ const TableOverflow = styled.div`
     border-bottom: 1px solid  #efefef;
   `};
 `;
+
 const StyledTable = styled.table`
   border-collapse: collapse;
   min-width: 57em;
@@ -82,6 +89,12 @@ const LoadingWrapper = styled.table`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const EmptyDataWrapper = styled.div`
+  flex: 1;
+  justify-content: center;
+  display: flex;
 `;
 
 export default Table;
