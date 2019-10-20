@@ -9,13 +9,14 @@ export const screenSizes = {
 
 export const searchParamsFormat = ({ searchKeyword, ...searchParams }) => {
   let formatedParams = '';
+  if (searchKeyword) {
+    formatedParams += `${searchKeyword}+`;
+  }
   Object.keys(searchParams).map(
     key => (formatedParams = `${formatedParams}${key}:${searchParams[key]}+`),
   );
   formatedParams = formatedParams.slice(0, -1);
-  if (searchKeyword) {
-    formatedParams += `+${searchKeyword}`;
-  }
+
   return formatedParams;
 };
 
@@ -26,6 +27,5 @@ export const media = Object.keys(screenSizes).reduce((accumulator, label) => {
       ${css(...args)};
     }
   `;
-  /* eslint-enable no-param-reassign*/
   return accumulator;
 }, {});

@@ -1,31 +1,30 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import Loader from '../Loader';
 import Columns from './Columns';
+import Pagination from './Pagination';
 import Items from './Items';
 
 import { media } from 'utils';
-import Pagination from './Pagination';
-import Loader from '../Loader';
 
 class Table extends Component {
   state = {
-    sorter: {
-      column: null,
-      order: null,
-      field: null,
-      columnKey: null,
-    },
+    sorter: {},
   };
 
   handleSorting = sorter => {
-    const { onChange } = this.props;
-    onChange && onChange(null, sorter);
+    const { onChange, pagination } = this.props;
+
+    this.setState({ sorter });
+    onChange && onChange(pagination, sorter);
   };
 
   handlePagination = pagination => {
     const { onChange } = this.props;
-    onChange && onChange(pagination);
+    const { sorter } = this.state;
+
+    onChange && onChange(pagination, sorter);
   };
 
   render() {

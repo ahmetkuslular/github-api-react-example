@@ -28,7 +28,7 @@ class Home extends Component {
     const language = event.target.value;
 
     this.setState({ language });
-    this.fetch({ language });
+    this.fetch({ ...this.state, language });
   };
 
   handleSearch = event => {
@@ -36,13 +36,17 @@ class Home extends Component {
 
     if (searchKeyword.length >= 3 || searchKeyword === '') {
       this.setState({ searchKeyword });
-      this.fetch({ searchKeyword });
+      this.fetch({ ...this.state, searchKeyword });
     }
   };
 
   handleTableChange = (pagination, sorter) => {
-    this.setState({ pagination, sorter });
-    this.fetch({ ...this.state, pagination, sorter });
+    this.setState({ pagination });
+    this.fetch({
+      ...this.state,
+      ...(pagination && { pagination: pagination }),
+      ...(sorter && { sorter: sorter }),
+    });
   };
 
   fetch = (params = {}) => {
