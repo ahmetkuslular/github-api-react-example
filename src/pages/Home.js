@@ -1,112 +1,141 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { media } from 'utils';
 import Input from '../components/Input/Input';
 import Radio from '../components/Radio';
-import Table from '../components/Table'
+import Table from '../components/Table';
+
+import { searchRepositories } from 'redux/search/actions';
 import RadioGroup from '../components/Radio/RadioGroup';
 
 const columns = [
-  { title: 'First Name', dataIndex: 'firstName', key: 'firstName' },
-  { title: 'Last Name', dataIndex: 'lastName', key: 'lastName' },
-  { title: 'Job Title', dataIndex: 'jobTitle', key: 'jobTitle' },
-];
-
-const data = [
-  {
-    key: '1',
-    firstName: 'Mike',
-    lastName: 'mike',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '2',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '3',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '4',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '5',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '6',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
-  {
-    key: '7',
-    firstName: 'John',
-    lastName: 'John',
-    jobTitle: '10 Downing Street',
-  },
+  { title: 'Repo Id', dataIndex: 'id', key: 'id' },
+  { title: 'Username', dataIndex: 'owner.login', key: 'username' },
+  // { title: 'Description', dataIndex: 'description', key: 'description' },
+  { title: 'Stars', dataIndex: 'stargazers_count', key: 'stars', sorter: true },
+  { title: 'Forks', dataIndex: 'forks', key: 'forks', sorter: true },
+  { title: 'Last Update Date', dataIndex: 'updated_at', key: 'updated', sorter: true },
 ];
 
 const options = [
   {
-    name: 'test',
+    name: 'language',
     label: 'Javascript',
-    value: 'A',
+    value: 'javascript',
   },
   {
-    name: 'test',
+    name: 'language',
     label: 'Scala',
-    value: 'B',
+    value: 'scala',
+  },
+  {
+    name: 'language',
+    label: 'Python',
+    value: 'python',
   },
 ];
 class Home extends Component {
   state = {
-    selectedValue: 'A',
+    language: 'scala',
+    searchKeyword: '',
+    sorter: null,
+    pagination: {
+      perPage: 10,
+      pageCount: 5,
+    },
   };
 
-  handleOnChange = e => {
-    this.setState({
-      selectedValue: e.target.value,
+  componentDidMount() {
+    this.fetch(this.state);
+  }
+
+  handleOnChange = event => {
+    const language = event.target.value;
+    this.setState({ language });
+    this.fetch({ language });
+  };
+
+  handleSearch = event => {
+    const searchKeyword = event.target.value;
+
+    if (searchKeyword.length >= 3 || searchKeyword === '') {
+      this.setState({ searchKeyword });
+      this.fetch({ searchKeyword });
+    }
+  };
+
+  handleTableChange = (pagination, sorter, extra) => {
+    this.setState({ pagination, sorter });
+    this.fetch({ ...this.state, pagination, sorter });
+  };
+
+  fetch = (params = {}) => {
+    const { language, searchKeyword, pagination, sorter } = params;
+    this.props.searchRepositories({
+      searchParams: {
+        language,
+        searchKeyword,
+      },
+      sort: sorter && sorter.columnKey,
+      order: sorter && sorter.order,
+      page: pagination && pagination.page,
+      per_page: pagination && pagination.perPage,
     });
   };
 
   render() {
-    const { selectedValue } = this.state;
+    const { language, pagination } = this.state;
+    const {
+      search: { data, loading },
+    } = this.props;
+
     return (
       <div>
         <AppTitle>GITHUB API EXAMPLE</AppTitle>
         <ContainerBox>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginBottom:10 }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ flex: 1 }}>
-              <Input placeholder="Search"/>
+              <Input placeholder="Search" onChange={this.handleSearch} />
             </div>
             <div
               style={{ flex: 3, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
             >
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Radio value="a" label="test" name="selam" />
-                <Radio value="b" label="test" name="selam" />
+                <RadioGroup
+                  name="language"
+                  options={options}
+                  value={language}
+                  onChange={this.handleOnChange}
+                />
               </div>
             </div>
           </div>
 
-          <Table tableKey="users" data={data} columns={columns} />
+          <Table
+            rowKey="id"
+            tableKey="users"
+            data={data && data.items}
+            columns={columns}
+            loading={loading}
+            onChange={this.handleTableChange}
+            pagination={pagination}
+          />
         </ContainerBox>
       </div>
     );
   }
 }
+const mapDispatchToProps = ({ search }) => ({
+  search,
+});
+
+export default connect(
+  mapDispatchToProps,
+  { searchRepositories },
+)(Home);
+
 const AppTitle = styled.h2`
   color: #b5b5b5;
   text-align: center;
@@ -125,5 +154,3 @@ export const ContainerBox = styled.div`
     background: none;
   `};
 `;
-
-export default Home;

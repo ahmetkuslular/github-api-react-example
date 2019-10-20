@@ -5,11 +5,11 @@ import Radio from './Radio';
 
 class RadioGroup extends Component {
   render() {
-    const { options, value, onChange, style } = this.props;
+    const { name, options, value, onChange, style } = this.props;
     return (
       <Wrapper style={style}>
         {options.map(option => (
-          <Radio {...option} checked={value === option.value} onChange={onChange} />
+          <Radio key={option.value} {...option} checked={value === option.value} onChange={onChange} name={name}/>
         ))}
       </Wrapper>
     );

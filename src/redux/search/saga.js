@@ -8,7 +8,6 @@ import { SEARCH_REPOSITORIES } from './actionTypes';
 function* fetchRepositories({ params }) {
   try {
     const response = yield call(service.GET, '/search/repositories', params);
-
     yield put(searchActions.searchRepositoriesSuccess(response));
   } catch (e) {
     console.log('ERROR', e);

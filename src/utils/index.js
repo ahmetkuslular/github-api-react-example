@@ -1,5 +1,5 @@
 import { css } from 'styled-components';
-const screenSizes = {
+export const screenSizes = {
   xs: 320,
   sm: 576,
   md: 768,
@@ -7,12 +7,15 @@ const screenSizes = {
   xl: 1200,
 };
 
-export const searchParamsFormat = searchParams => {
+export const searchParamsFormat = ({ searchKeyword, ...searchParams }) => {
   let formatedParams = '';
   Object.keys(searchParams).map(
     key => (formatedParams = `${formatedParams}${key}:${searchParams[key]}+`),
   );
   formatedParams = formatedParams.slice(0, -1);
+  if (searchKeyword) {
+    formatedParams += `+${searchKeyword}`;
+  }
   return formatedParams;
 };
 
