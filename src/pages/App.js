@@ -9,14 +9,14 @@ import { media } from 'utils';
 import repoColumns from 'constants/repoColumns';
 import SearchBox from './SearchBox';
 
-class Home extends Component {
+class App extends Component {
   state = {
-    language: 'scala',
+    language: 'javascript',
     searchKeyword: '',
     sorter: null,
     pagination: {
       perPage: 10,
-      pageCount: 5,
+      pageCount: 10,
     },
   };
 
@@ -99,7 +99,7 @@ const mapDispatchToProps = ({ search }) => ({
 export default connect(
   mapDispatchToProps,
   { searchRepositories },
-)(Home);
+)(App);
 
 const AppTitle = styled.h2`
   color: #b5b5b5;

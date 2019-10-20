@@ -41,7 +41,7 @@ class Table extends Component {
           <Columns columns={columns} onChange={this.handleSorting} />
           <Items columns={columns} data={data} rowKey={rowKey} />
         </StyledTable>
-        <Pagination {...pagination} onChange={this.handlePagination} />
+        {pagination && <Pagination {...pagination} onChange={this.handlePagination} />}
       </TableOverflow>
     );
   }
