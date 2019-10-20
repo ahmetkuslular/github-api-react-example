@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Input from 'components/Input';
 import Table from 'components/Table';
-import RadioGroup from 'components/Radio/RadioGroup';
 
 import { searchRepositories } from 'redux/search/actions';
 import { media } from 'utils';
 import repoColumns from 'constants/repoColumns';
-import languageOptions from 'constants/languageOptions';
 import SearchBox from './SearchBox';
 
 class Home extends Component {

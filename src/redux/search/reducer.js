@@ -15,7 +15,6 @@ function searchReducer(state = INITIAL_STATE, action) {
     case SEARCH_REPOSITORIES:
       return {
         ...state,
-        data: null,
         loading: true,
       };
     case SEARCH_REPOSITORIES_SUCCESS:

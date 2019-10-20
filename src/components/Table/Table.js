@@ -6,6 +6,7 @@ import Items from './Items';
 
 import { media } from 'utils';
 import Pagination from './Pagination';
+import Loader from '../Loader';
 
 class Table extends Component {
   state = {
@@ -32,17 +33,14 @@ class Table extends Component {
 
     return (
       <TableOverflow>
+        {loading && (
+          <LoadingWrapper>
+            <Loader />
+          </LoadingWrapper>
+        )}
         <StyledTable>
           <Columns columns={columns} onChange={this.handleSorting} />
-          {loading ? (
-            <tbody>
-              <tr>
-                <td>Loading..</td>
-              </tr>
-            </tbody>
-          ) : (
-            <Items columns={columns} data={data} rowKey={rowKey} />
-          )}
+          <Items columns={columns} data={data} rowKey={rowKey} />
         </StyledTable>
         <Pagination {...pagination} onChange={this.handlePagination} />
       </TableOverflow>
@@ -50,9 +48,10 @@ class Table extends Component {
   }
 }
 
-export const TableOverflow = styled.div`
+const TableOverflow = styled.div`
   background-color: #fff;
   overflow-x: scroll;
+  position: relative;
   ${media.sm`
     max-width: 100%;
     overflow-x: hidden;
@@ -61,7 +60,7 @@ export const TableOverflow = styled.div`
     border-bottom: 1px solid  #efefef;
   `};
 `;
-export const StyledTable = styled.table`
+const StyledTable = styled.table`
   border-collapse: collapse;
   min-width: 57em;
   width: 100%;
@@ -70,6 +69,20 @@ export const StyledTable = styled.table`
     table-layout: fixed;
     min-width: 100%;
   `};
+`;
+
+const LoadingWrapper = styled.table`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  background: #f1f1f1;
+  opacity: 0.5;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default Table;
