@@ -27,10 +27,10 @@ export class Pagination extends Component {
     return (
       <StyledPagination>
         <PaginationButton disabled={!hasPrev} onClick={() => this.handleClick(currentPage - 1)}>
-          Prev
+          PREV
         </PaginationButton>
         <PaginationButton disabled={!hasNext} onClick={() => this.handleClick(currentPage + 1)}>
-          Next
+          NEXT
         </PaginationButton>
       </StyledPagination>
     );

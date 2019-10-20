@@ -2,40 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { media } from 'utils';
-import Input from '../components/Input/Input';
-import Radio from '../components/Radio';
-import Table from '../components/Table';
+import Input from 'components/Input';
+import Table from 'components/Table';
+import RadioGroup from 'components/Radio/RadioGroup';
 
 import { searchRepositories } from 'redux/search/actions';
-import RadioGroup from '../components/Radio/RadioGroup';
+import { media } from 'utils';
+import repoColumns from 'constants/repoColumns';
+import languageOptions from 'constants/languageOptions';
+import SearchBox from './SearchBox';
 
-const columns = [
-  { title: 'Repo Id', dataIndex: 'id', key: 'id' },
-  { title: 'Username', dataIndex: 'owner.login', key: 'username' },
-  // { title: 'Description', dataIndex: 'description', key: 'description' },
-  { title: 'Stars', dataIndex: 'stargazers_count', key: 'stars', sorter: true },
-  { title: 'Forks', dataIndex: 'forks', key: 'forks', sorter: true },
-  { title: 'Last Update Date', dataIndex: 'updated_at', key: 'updated', sorter: true },
-];
-
-const options = [
-  {
-    name: 'language',
-    label: 'Javascript',
-    value: 'javascript',
-  },
-  {
-    name: 'language',
-    label: 'Scala',
-    value: 'scala',
-  },
-  {
-    name: 'language',
-    label: 'Python',
-    value: 'python',
-  },
-];
 class Home extends Component {
   state = {
     language: 'scala',
@@ -51,8 +27,9 @@ class Home extends Component {
     this.fetch(this.state);
   }
 
-  handleOnChange = event => {
+  handleRadioSelected = event => {
     const language = event.target.value;
+
     this.setState({ language });
     this.fetch({ language });
   };
@@ -66,7 +43,7 @@ class Home extends Component {
     }
   };
 
-  handleTableChange = (pagination, sorter, extra) => {
+  handleTableChange = (pagination, sorter) => {
     this.setState({ pagination, sorter });
     this.fetch({ ...this.state, pagination, sorter });
   };
@@ -95,29 +72,16 @@ class Home extends Component {
       <div>
         <AppTitle>GITHUB API EXAMPLE</AppTitle>
         <ContainerBox>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ flex: 1 }}>
-              <Input placeholder="Search" onChange={this.handleSearch} />
-            </div>
-            <div
-              style={{ flex: 3, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <RadioGroup
-                  name="language"
-                  options={options}
-                  value={language}
-                  onChange={this.handleOnChange}
-                />
-              </div>
-            </div>
-          </div>
-
+          <SearchBox
+            language={language}
+            handleSearch={this.handleSearch}
+            handleRadioSelected={this.handleRadioSelected}
+          />
           <Table
             rowKey="id"
             tableKey="users"
             data={data && data.items}
-            columns={columns}
+            columns={repoColumns}
             loading={loading}
             onChange={this.handleTableChange}
             pagination={pagination}
