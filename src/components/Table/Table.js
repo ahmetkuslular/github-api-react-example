@@ -10,6 +10,13 @@ import { media } from 'utils';
 import { EmptyData } from '../Icons';
 
 class Table extends Component {
+
+  static defaultProps = {
+    data: [],
+    columns: [],
+    loading: false
+  };
+
   state = {
     sorter: {},
   };
@@ -30,7 +37,7 @@ class Table extends Component {
 
   render() {
     const { rowKey, columns, data, loading, pagination } = this.props;
-
+    console.log({data,loading});
     return (
       <TableOverflow>
         {loading && (
@@ -42,7 +49,7 @@ class Table extends Component {
           <Columns columns={columns} onChange={this.handleSorting} />
           <Items columns={columns} data={data} rowKey={rowKey} />
         </StyledTable>
-        {data.length < 1 && (
+        {(data || data && data.length < 1)  && (
           <EmptyDataWrapper>
             <EmptyData />
           </EmptyDataWrapper>

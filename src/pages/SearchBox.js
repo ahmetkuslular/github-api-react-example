@@ -5,11 +5,11 @@ import Input from 'components/Input';
 import RadioGroup from '../components/RadioGroup';
 import languageOptions from 'constants/languageOptions';
 
-function SearchBox({ language, handleSearch, handleRadioSelected }) {
+function SearchBox({ language,searchKeyword, handleSearch, handleRadioSelected }) {
   return (
     <Container>
       <InputWrapper>
-        <Input placeholder="Search" onChange={handleSearch} />
+        <Input placeholder="Search" onChange={handleSearch} value={searchKeyword} />
       </InputWrapper>
       <RadioGroupWrapper>
         <RadioGroup

@@ -11,7 +11,8 @@ const api = axios.create({
   },
 });
 
-async function executeRequest(method, pathname, { searchParams, ...params }) {
+//Bu kısımda refactoring gerekiyor. Params daha uygun bir şekilde geçilebilir.
+async function executeRequest(method, pathname, { searchParams, pagination, sorter,...params }) {
   const requestUrl = url.format({
     pathname,
     query: { q: searchParamsFormat(searchParams) },
@@ -20,7 +21,7 @@ async function executeRequest(method, pathname, { searchParams, ...params }) {
   const requestObject = {
     method,
     url: decodeURIComponent(requestUrl),
-    params,
+    params : {...pagination, ...sorter, ...params},
   };
 
   return new Promise((resolve, reject) => {

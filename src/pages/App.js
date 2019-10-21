@@ -10,33 +10,47 @@ import repoColumns from 'constants/repoColumns';
 import SearchBox from './SearchBox';
 
 class App extends Component {
-  state = {
-    language: 'javascript',
-    searchKeyword: '',
-    sorter: null,
-    pagination: {
-      perPage: 10,
-      pageCount: 10,
-    },
-  };
+  state = this.initialState();
 
+  initialState (){
+    const {search: {params}} = this.props;
+
+    const temp = {
+      searchParams: {
+        language: 'javascript'
+      },
+      pagination: {
+        perPage: 10,
+        pageCount: 10,
+      },
+      ...params
+    }
+    console.log('TEMP', temp);
+    return temp;
+
+  }
   componentDidMount() {
+
     this.fetch(this.state);
   }
 
   handleRadioSelected = event => {
     const language = event.target.value;
+    const { searchParams } = this.state;
 
-    this.setState({ language });
-    this.fetch({ ...this.state, language });
+    searchParams.language = language;
+    this.setState({ searchParams });
+    this.fetch({ ...this.state, searchParams });
   };
 
   handleSearch = event => {
     const searchKeyword = event.target.value;
+    const { searchParams } = this.state;
 
+    searchParams.searchKeyword = searchKeyword;
     if (searchKeyword.length >= 3 || searchKeyword === '') {
-      this.setState({ searchKeyword });
-      this.fetch({ ...this.state, searchKeyword });
+      this.setState({ searchParams });
+      this.fetch({ ...this.state, searchParams });
     }
   };
 
@@ -45,26 +59,22 @@ class App extends Component {
     this.fetch({
       ...this.state,
       ...(pagination && { pagination: pagination }),
-      ...(sorter && { sorter: sorter }),
+      ...(sorter && { sorter: sorter}),
     });
   };
 
   fetch = (params = {}) => {
-    const { language, searchKeyword, pagination, sorter } = params;
+    const { searchParams, pagination, sorter } = params;
+
     this.props.searchRepositories({
-      searchParams: {
-        language,
-        searchKeyword,
-      },
-      sort: sorter && sorter.columnKey,
-      order: sorter && sorter.order,
-      page: pagination && pagination.page,
-      per_page: pagination && pagination.perPage,
+      searchParams,
+      pagination,
+      sorter
     });
   };
 
   render() {
-    const { language, pagination } = this.state;
+    const { searchParams,pagination } = this.state;
     const {
       search: { data, loading },
     } = this.props;
@@ -74,7 +84,7 @@ class App extends Component {
         <AppTitle>GITHUB API EXAMPLE</AppTitle>
         <ContainerBox>
           <SearchBox
-            language={language}
+            {...searchParams}
             handleSearch={this.handleSearch}
             handleRadioSelected={this.handleRadioSelected}
           />
