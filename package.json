@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "date-fns": "^2.5.1",
+    "gh-pages": "^2.1.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-icon-base": "^2.1.2",
