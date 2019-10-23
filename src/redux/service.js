@@ -2,7 +2,7 @@ import axios from 'axios';
 import url from 'url';
 
 import { BASE_API_URL } from 'constants/config';
-import { searchParamsFormat } from 'utils';
+import { queryFormat } from 'utils';
 
 const api = axios.create({
   baseURL: url.format(BASE_API_URL),
@@ -11,12 +11,16 @@ const api = axios.create({
   },
 });
 
-async function executeRequest(method, pathname, { searchParams, ...params }) {
+async function executeRequest(method, pathname, { q, ...params }) {
+  const query = {
+    ...(q && { q: queryFormat(q) }),
+  };
+
   const requestUrl = url.format({
     pathname,
-    query: { q: searchParamsFormat(searchParams) },
+    query,
   });
-
+  
   const requestObject = {
     method,
     url: decodeURIComponent(requestUrl),

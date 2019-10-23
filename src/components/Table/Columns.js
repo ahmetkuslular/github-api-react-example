@@ -4,7 +4,8 @@ import { media } from '../../utils';
 import { UpIcon, DownIcon, SortIcon } from '../Icons';
 
 class Columns extends Component {
-  state = {
+
+  static defaultProps = {
     sorter: {
       column: null,
       order: 'desc',
@@ -13,9 +14,9 @@ class Columns extends Component {
     },
   };
 
+
   onChange = column => {
-    const { sorter } = this.state;
-    const { onChange } = this.props;
+    const { onChange, sorter } = this.props;
     const temp = {
       column,
       order: sorter.order === 'desc' ? 'asc' : 'desc',
@@ -23,13 +24,12 @@ class Columns extends Component {
       columnKey: column.key,
     };
 
-    this.setState({ sorter: temp });
     onChange && onChange(temp);
   };
 
   render() {
-    const { sorter } = this.state;
-    const { columns } = this.props;
+    const { columns, sorter } = this.props;
+
     return (
       <TitlesWrapper>
         <Titles>

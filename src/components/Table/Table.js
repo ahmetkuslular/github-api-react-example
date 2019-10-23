@@ -10,6 +10,11 @@ import { media } from 'utils';
 import { EmptyData } from '../Icons';
 
 class Table extends Component {
+  static defaultProps = {
+    data: [],
+    loading: false,
+  };
+
   state = {
     sorter: {},
   };
@@ -29,7 +34,7 @@ class Table extends Component {
   };
 
   render() {
-    const { rowKey, columns, data, loading, pagination } = this.props;
+    const { rowKey, columns, data, loading, pagination, sorter } = this.props;
 
     return (
       <TableOverflow>
@@ -38,14 +43,15 @@ class Table extends Component {
             <Loader />
           </LoadingWrapper>
         )}
-        <StyledTable>
-          <Columns columns={columns} onChange={this.handleSorting} />
-          <Items columns={columns} data={data} rowKey={rowKey} />
-        </StyledTable>
-        {data.length < 1 && (
+        {data && data.length < 1 ? (
           <EmptyDataWrapper>
             <EmptyData />
           </EmptyDataWrapper>
+        ) : (
+          <StyledTable>
+            <Columns columns={columns} onChange={this.handleSorting} sorter={sorter} />
+            <Items columns={columns} data={data} rowKey={rowKey} />
+          </StyledTable>
         )}
         {pagination && <Pagination {...pagination} onChange={this.handlePagination} />}
       </TableOverflow>
@@ -57,6 +63,7 @@ const TableOverflow = styled.div`
   background-color: #fff;
   overflow-x: scroll;
   position: relative;
+  min-height: 120px;
   ${media.sm`
     max-width: 100%;
     overflow-x: hidden;
@@ -77,7 +84,7 @@ const StyledTable = styled.table`
   `};
 `;
 
-const LoadingWrapper = styled.table`
+const LoadingWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -95,6 +102,7 @@ const EmptyDataWrapper = styled.div`
   flex: 1;
   justify-content: center;
   display: flex;
+  margin: 50px;
 `;
 
 export default Table;

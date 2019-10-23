@@ -6,6 +6,7 @@ export class Pagination extends Component {
   static defaultProps = {
     page: 1,
     loading: false,
+    pageCount: 10,
   };
   static propTypes = {
     page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -14,8 +15,8 @@ export class Pagination extends Component {
   };
 
   handleClick = page => {
-    const { onChange, perPage, pageCount } = this.props;
-    onChange && onChange({ page, perPage, pageCount });
+    const { onChange, perPage } = this.props;
+    onChange && onChange({ page, perPage });
   };
 
   render() {

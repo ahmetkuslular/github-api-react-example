@@ -5,9 +5,10 @@ import {
 } from './actionTypes';
 
 const INITIAL_STATE = {
-  data: null,
+  data: [],
   loading: true,
   error: null,
+  params: {},
 };
 
 function searchReducer(state = INITIAL_STATE, action) {
@@ -15,6 +16,7 @@ function searchReducer(state = INITIAL_STATE, action) {
     case SEARCH_REPOSITORIES:
       return {
         ...state,
+        params: action.params,
         loading: true,
       };
     case SEARCH_REPOSITORIES_SUCCESS:
@@ -28,6 +30,7 @@ function searchReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         error: action.error,
+        data: [],
         loading: false,
       };
     default:

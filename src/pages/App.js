@@ -8,73 +8,101 @@ import { searchRepositories } from 'redux/search/actions';
 import { media } from 'utils';
 import repoColumns from 'constants/repoColumns';
 import SearchBox from './SearchBox';
+import ErrorBox from '../components/ErrorBox';
 
 class App extends Component {
-  state = {
-    language: 'javascript',
-    searchKeyword: '',
-    sorter: null,
-    pagination: {
-      perPage: 10,
-      pageCount: 10,
-    },
-  };
+  state = this.initialState();
+
+  initialState() {
+    const {
+      search: { params },
+    } = this.props;
+
+    const defaultParams = {
+      q: {
+        language: 'javascript',
+      },
+      per_page: 10,
+      page: 1,
+    };
+
+    return { ...defaultParams, ...params };
+  }
 
   componentDidMount() {
-    this.fetch(this.state);
+
+    const {
+      search: { data },
+    } = this.props;
+    console.log('SELAM:', data);
+    if (data && data.length < 1) {
+      this.fetch(this.state);
+    }
   }
 
   handleRadioSelected = event => {
     const language = event.target.value;
+    const { q } = this.state;
+    q.language = language;
 
-    this.setState({ language });
-    this.fetch({ ...this.state, language });
+    this.setState({ q });
+    this.fetch({ q });
   };
 
   handleSearch = event => {
     const searchKeyword = event.target.value;
+    const { q } = this.state;
+    q.searchKeyword = searchKeyword;
 
     if (searchKeyword.length >= 3 || searchKeyword === '') {
-      this.setState({ searchKeyword });
-      this.fetch({ ...this.state, searchKeyword });
+      this.setState({ q });
+      this.fetch({ q });
     }
   };
 
   handleTableChange = (pagination, sorter) => {
-    this.setState({ pagination });
+    this.setState({
+      page: pagination.page,
+      per_page: pagination.perPage,
+      sort: sorter.columnKey,
+      order: sorter.order,
+    });
     this.fetch({
-      ...this.state,
-      ...(pagination && { pagination: pagination }),
-      ...(sorter && { sorter: sorter }),
+      page: pagination.page,
+      per_page: pagination.perPage,
+      sort: sorter.columnKey,
+      order: sorter.order,
     });
   };
 
-  fetch = (params = {}) => {
-    const { language, searchKeyword, pagination, sorter } = params;
-    this.props.searchRepositories({
-      searchParams: {
-        language,
-        searchKeyword,
-      },
-      sort: sorter && sorter.columnKey,
-      order: sorter && sorter.order,
-      page: pagination && pagination.page,
-      per_page: pagination && pagination.perPage,
-    });
+  fetch = (fetchParams = {}) => {
+    const {
+      search: { params },
+    } = this.props;
+
+    this.props.searchRepositories({ ...params, ...fetchParams });
   };
 
   render() {
-    const { language, pagination } = this.state;
     const {
-      search: { data, loading },
+      search: { data, loading, params },
     } = this.props;
-
+    const { per_page, page, page_count, sort, order } = this.state;
+    const pagination = {
+      perPage: per_page,
+      pageCount: page_count,
+      page,
+    };
+    const sorter = {
+      columnKey: sort,
+      order,
+    };
     return (
       <div>
         <AppTitle>GITHUB API EXAMPLE</AppTitle>
         <ContainerBox>
           <SearchBox
-            language={language}
+            {...params.q}
             handleSearch={this.handleSearch}
             handleRadioSelected={this.handleRadioSelected}
           />
@@ -86,6 +114,7 @@ class App extends Component {
             loading={loading}
             onChange={this.handleTableChange}
             pagination={pagination}
+            sorter={sorter}
           />
         </ContainerBox>
       </div>
