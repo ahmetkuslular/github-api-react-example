@@ -6,7 +6,7 @@ import Table from 'components/Table';
 import SearchBox from './SearchBox';
 
 import { searchRepositories } from 'redux/search/actions';
-import { media } from 'utils';
+import { media } from 'themes/mediaSettings';
 import repoColumns from 'constants/repoColumns';
 
 class Home extends Component {
@@ -127,14 +127,14 @@ export default connect(
 
 const ContainerBox = styled.div`
   background-color: ${props => props.theme.primaryColor};
-  border: 1px solid ${props => props.theme.borderColor};;
+  border: 1px solid ${props => props.theme.borderColor};
   border-radius: 5px;
   padding: 2.14em;
   margin: 0 0 2.14em 0;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   ${media.sm`
-    padding: 0;
-    border: none;
     background: none;
+    box-shadow: none;
+    border: none;
   `};
 `;

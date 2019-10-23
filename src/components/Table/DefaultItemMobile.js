@@ -4,13 +4,15 @@ import styled from 'styled-components';
 const DefaultItemMobile = ({ item, columns }) => {
   return (
     <TBody key="content">
-      {columns.map(column => (
+      {columns.map((column, index) => (
         <MobileItemWrapper key={column.key} disableFlex>
-          <MobileItem key="column" isTitle>
+          <MobileItemLabel key="column" isTitle>
             {column.title}
-          </MobileItem>
+          </MobileItemLabel>
           <MobileItem textRight key="value">
-            {item[column.dataIndex]}
+            {column.render
+              ? column.render(item[column.dataIndex], item, index)
+              : item[column.dataIndex]}
           </MobileItem>
         </MobileItemWrapper>
       ))}
@@ -18,21 +20,27 @@ const DefaultItemMobile = ({ item, columns }) => {
   );
 };
 
+export default DefaultItemMobile;
+
 const TBody = styled.tbody`
-  &:last-child {
-    tr:last-child {
-      border-bottom: none !important;
-    }
-  }
-  tr:first-child > td {
-    padding-top: 2.143em;
-  }
-  tr:last-child > td {
-    padding-bottom: 2.143em;
+
+`;
+
+const MobileItemWrapper = styled.tr`
+  border: solid 1px ${props => props.theme.borderColor};
+`;
+
+const MobileItemLabel = styled.td`
+  padding: 16px 16px;
+  color: ${props => props.theme.tableTextColor};
+  background-color: transparent;
+  font-weight: 600;
+  text-align: ${props => (props.textRight ? 'right' : 'left')};
+  div {
+    justify-content: ${props => (props.textRight ? 'flex-end' : 'flex-start')};
   }
 `;
 
-const MobileItemWrapper = styled.tr``;
 const MobileItem = styled.td`
   padding: 16px 16px;
   color: ${props => props.theme.tableTextColor};
@@ -43,5 +51,3 @@ const MobileItem = styled.td`
     justify-content: ${props => (props.textRight ? 'flex-end' : 'flex-start')};
   }
 `;
-
-export default DefaultItemMobile;

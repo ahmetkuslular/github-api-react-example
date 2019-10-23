@@ -2,7 +2,7 @@ import React from 'react';
 import DefaultItem from './DefaultItem';
 import DefaultItemMobile from './DefaultItemMobile';
 import Media from 'react-media';
-import { screenSizes } from '../../utils';
+import { screenSizes } from 'themes/mediaSettings';
 
 function Items({ rowKey, columns, data }) {
   return (

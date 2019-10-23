@@ -6,7 +6,7 @@ import Columns from './Columns';
 import Pagination from './Pagination';
 import Items from './Items';
 
-import { media } from 'utils';
+import { media } from 'themes/mediaSettings';
 import { EmptyData } from '../Icons';
 
 class Table extends Component {
@@ -68,8 +68,6 @@ const TableOverflow = styled.div`
     max-width: 100%;
     overflow-x: hidden;
     background-color: transparent;
-    border-top: 1px solid  #efefef;
-    border-bottom: 1px solid  #efefef;
   `};
 `;
 
@@ -81,6 +79,7 @@ const StyledTable = styled.table`
   ${media.sm`
     table-layout: fixed;
     min-width: 100%;
+    border-collapse: collapse;
   `};
 `;
 

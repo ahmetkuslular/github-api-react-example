@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Input from 'components/Input';
 import RadioGroup from '../components/RadioGroup';
 import languageOptions from 'constants/languageOptions';
+import { media } from '../themes/mediaSettings';
 
 function SearchBox({ language, handleSearch, handleRadioSelected }) {
   return (
@@ -28,10 +29,19 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  ${media.sm`
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom:20px; 
+  `};
 `;
 
 const InputWrapper = styled.div`
   flex: 1;
+  ${media.sm`
+    width:100%;
+    margin-bottom:20px;
+  `};
 `;
 
 const RadioGroupWrapper = styled.div`

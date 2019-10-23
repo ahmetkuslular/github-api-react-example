@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import styled, { css , withTheme} from 'styled-components';
-import { media } from '../../utils';
+import styled, { css, withTheme } from 'styled-components';
+import { media } from 'themes/mediaSettings';
 import { UpIcon, DownIcon, SortIcon } from '../Icons';
 
 class Columns extends Component {
@@ -49,7 +49,12 @@ class Columns extends Component {
                         style={{ marginLeft: 10 }}
                       />
                     ) : (
-                      <DownIcon width={12} height={12} color={theme.secondaryColor} style={{ marginLeft: 10 }} />
+                      <DownIcon
+                        width={12}
+                        height={12}
+                        color={theme.secondaryColor}
+                        style={{ marginLeft: 10 }}
+                      />
                     )
                   ) : (
                     <SortIcon width={12} height={12} color="gray" style={{ marginLeft: 10 }} />
