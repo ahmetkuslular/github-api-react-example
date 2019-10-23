@@ -18,7 +18,6 @@ const DefaultItem = ({ item, columns }) => {
 };
 
 const TBody = styled.tbody`
-
   &:last-child {
     tr:last-child {
       border-bottom: none !important;
@@ -26,23 +25,25 @@ const TBody = styled.tbody`
   }
 `;
 
-export const ItemWrapper = styled.tr`
+const ItemWrapper = styled.tr`
   cursor: auto;
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid ${props => props.theme.borderColor};;
   max-width: 10px;
  
   &:hover {
     > td {
-      background-color: #f8f9fa;
+      background-color: ${props => props.theme.secondaryColor};
+      color: ${props => props.theme.textColor};
     }
   }
 `;
 
-export const Item = styled.td`
+const Item = styled.td`
   white-space: normal;
   padding: 16px 16px;
-  background-color: #fff;
+  background-color: transparent;
   font-size: 12px;
+  color:${props => props.theme.tableTextColor};
 `;
 
 export default DefaultItem;

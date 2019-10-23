@@ -10,12 +10,13 @@ const StyledInput = styled.input`
   height: 3em;
   border-radius: 0.357em;
   padding: 0 0.71em;
-  border: solid 1px #efefef;
+  border: solid 2px ${props => props.theme.borderColor};;
   color: #395564;
   outline: none;
+  background-color: transparent;
   &:focus {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    border: solid 1px #f50;
+    border: solid 2px ${props => props.theme.secondaryColor};;;
   }
   &:disabled {
     cursor: not-allowed;

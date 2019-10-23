@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css , withTheme} from 'styled-components';
 import { media } from '../../utils';
 import { UpIcon, DownIcon, SortIcon } from '../Icons';
 
 class Columns extends Component {
-
   static defaultProps = {
     sorter: {
       column: null,
@@ -13,7 +12,6 @@ class Columns extends Component {
       columnKey: null,
     },
   };
-
 
   onChange = column => {
     const { onChange, sorter } = this.props;
@@ -28,7 +26,7 @@ class Columns extends Component {
   };
 
   render() {
-    const { columns, sorter } = this.props;
+    const { columns, sorter, theme } = this.props;
 
     return (
       <TitlesWrapper>
@@ -44,9 +42,14 @@ class Columns extends Component {
                   {column.title}
                   {sorter && column.key === sorter.columnKey ? (
                     sorter.order === 'asc' ? (
-                      <UpIcon width={12} height={12} color="#f50" style={{ marginLeft: 10 }} />
+                      <UpIcon
+                        width={12}
+                        height={12}
+                        color={theme.secondaryColor}
+                        style={{ marginLeft: 10 }}
+                      />
                     ) : (
-                      <DownIcon width={12} height={12} color="#f50" style={{ marginLeft: 10 }} />
+                      <DownIcon width={12} height={12} color={theme.secondaryColor} style={{ marginLeft: 10 }} />
                     )
                   ) : (
                     <SortIcon width={12} height={12} color="gray" style={{ marginLeft: 10 }} />
@@ -77,16 +80,16 @@ const Title = styled.th`
   font-size: 15px;
   text-align: left;
   white-space: pre-line;
-  color: #395564;
+  color: ${props => props.theme.columnLabel};
   white-space: nowrap
     ${props =>
       props.sorter &&
       css`
         &:hover {
-          background-color: #f6f6f6;
+          background-color: ${props => props.theme.hoverColor};
           cursor: pointer;
         }
       `};
 `;
 
-export default Columns;
+export default withTheme(Columns);

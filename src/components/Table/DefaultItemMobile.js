@@ -35,7 +35,8 @@ const TBody = styled.tbody`
 const MobileItemWrapper = styled.tr``;
 const MobileItem = styled.td`
   padding: 16px 16px;
-  color: '#4c4c4c';
+  color: ${props => props.theme.tableTextColor};
+  background-color: transparent;
   font-weight: 400;
   text-align: ${props => (props.textRight ? 'right' : 'left')};
   div {

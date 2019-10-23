@@ -60,14 +60,14 @@ class Table extends Component {
 }
 
 const TableOverflow = styled.div`
-  background-color: #fff;
+  background-color: transparent;
   overflow-x: scroll;
   position: relative;
   min-height: 120px;
   ${media.sm`
     max-width: 100%;
     overflow-x: hidden;
-    background-color: #fff;
+    background-color: transparent;
     border-top: 1px solid  #efefef;
     border-bottom: 1px solid  #efefef;
   `};

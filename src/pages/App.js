@@ -1,153 +1,94 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { connect, Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import Table from 'components/Table';
+import Home from './Home';
 
-import { searchRepositories } from 'redux/search/actions';
-import { media } from 'utils';
-import repoColumns from 'constants/repoColumns';
-import SearchBox from './SearchBox';
-import ErrorBox from '../components/ErrorBox';
+import { persistor, store } from 'store';
+import themes from 'themes';
+import { changeTheme } from 'redux/appSettings/actions';
 
 class App extends Component {
-  state = this.initialState();
-
-  initialState() {
+  changeTheme = () => {
     const {
-      search: { params },
+      appSettings: { theme },
     } = this.props;
 
-    const defaultParams = {
-      q: {
-        language: 'javascript',
-      },
-      per_page: 10,
-      page: 1,
-    };
-
-    return { ...defaultParams, ...params };
-  }
-
-  componentDidMount() {
-
-    const {
-      search: { data },
-    } = this.props;
-    console.log('SELAM:', data);
-    if (data && data.length < 1) {
-      this.fetch(this.state);
-    }
-  }
-
-  handleRadioSelected = event => {
-    const language = event.target.value;
-    const { q } = this.state;
-    q.language = language;
-
-    this.setState({ q });
-    this.fetch({ q });
-  };
-
-  handleSearch = event => {
-    const searchKeyword = event.target.value;
-    const { q } = this.state;
-    q.searchKeyword = searchKeyword;
-
-    if (searchKeyword.length >= 3 || searchKeyword === '') {
-      this.setState({ q });
-      this.fetch({ q });
-    }
-  };
-
-  handleTableChange = (pagination, sorter) => {
-    this.setState({
-      page: pagination.page,
-      per_page: pagination.perPage,
-      sort: sorter.columnKey,
-      order: sorter.order,
-    });
-    this.fetch({
-      page: pagination.page,
-      per_page: pagination.perPage,
-      sort: sorter.columnKey,
-      order: sorter.order,
-    });
-  };
-
-  fetch = (fetchParams = {}) => {
-    const {
-      search: { params },
-    } = this.props;
-
-    this.props.searchRepositories({ ...params, ...fetchParams });
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    this.props.changeTheme(newTheme);
   };
 
   render() {
     const {
-      search: { data, loading, params },
+      appSettings: { theme },
     } = this.props;
-    const { per_page, page, page_count, sort, order } = this.state;
-    const pagination = {
-      perPage: per_page,
-      pageCount: page_count,
-      page,
-    };
-    const sorter = {
-      columnKey: sort,
-      order,
-    };
+
     return (
-      <div>
-        <AppTitle>GITHUB API EXAMPLE</AppTitle>
-        <ContainerBox>
-          <SearchBox
-            {...params.q}
-            handleSearch={this.handleSearch}
-            handleRadioSelected={this.handleRadioSelected}
-          />
-          <Table
-            rowKey="id"
-            tableKey="users"
-            data={data && data.items}
-            columns={repoColumns}
-            loading={loading}
-            onChange={this.handleTableChange}
-            pagination={pagination}
-            sorter={sorter}
-          />
-        </ContainerBox>
-      </div>
+      <ThemeProvider theme={themes[theme]}>
+        <Main>
+          <Container>
+            <AppTitle>
+              GITHUB API EXAMPLE{' '}
+              <MoonButton onClick={this.changeTheme}>
+                {theme === 'light' ? (
+                  <span role="img" aria-label={theme}>
+                    🌒
+                  </span>
+                ) : (
+                  <span role="img" aria-label={theme}>
+                    🌔
+                  </span>
+                )}
+              </MoonButton>
+            </AppTitle>
+            <Home />
+          </Container>
+        </Main>
+      </ThemeProvider>
     );
   }
 }
-const mapDispatchToProps = ({ search }) => ({
-  search,
+
+const mapDispatchToProps = ({ appSettings }) => ({
+  appSettings,
 });
 
 export default connect(
   mapDispatchToProps,
-  { searchRepositories },
+  { changeTheme },
 )(App);
 
-const AppTitle = styled.h2`
+const Main = styled.div`
+  position: absolute
+  background-color: ${props => props.theme.background};
+  height: 100%;
+  width:100%;
+`;
+
+const Container = styled.div`
+  flex: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
+const AppTitle = styled.div`
   color: #b5b5b5;
   text-align: center;
+  font-size: 30px;
+  font-weight: 600;
   &:hover {
     color: #f50;
   }
 `;
 
-export const ContainerBox = styled.div`
-  background-color: #fff;
-  border: 1px solid #efefef;
-  border-radius: 5px;
-  padding: 2.14em;
-  margin: 0 0 2.14em 0;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  ${media.sm`
-    padding: 0;
-    border: none;
-    background: none;
-  `};
+const MoonButton = styled.button`
+  background-color: transparent;
+
+  text-transform: capitalize;
+  font-size: 25px;
+  outline: none;
+  border: none;
+  cursor: pointer;
 `;
