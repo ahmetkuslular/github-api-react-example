@@ -7,7 +7,7 @@
  
 
 
-[LIVE](https://github.com/ahmetkuslular/github-api-react-example.git)
+[LIVE](https://ahmetkuslular.github.io/github-api-react-example/)
 
 ## How To Use
 
