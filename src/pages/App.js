@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { connect, Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import { connect } from 'react-redux';
 
 import Home from './Home';
 
-import { persistor, store } from 'store';
 import themes from 'themes';
 import { changeTheme } from 'redux/appSettings/actions';
 

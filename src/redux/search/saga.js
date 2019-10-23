@@ -10,7 +10,6 @@ function* fetchRepositories({ params }) {
     const response = yield call(service.GET, '/search/repositories', params);
     yield put(searchActions.searchRepositoriesSuccess(response));
   } catch (e) {
-    console.log('ERROR', e);
     yield put(searchActions.searchRepositoriesError(e.message));
   }
 }
