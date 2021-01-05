@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://ahmetkuslular.github.io/github-api-react-example/",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "date-fns": "^2.5.1",
     "gh-pages": "^2.1.1",
     "react": "^16.10.2",
